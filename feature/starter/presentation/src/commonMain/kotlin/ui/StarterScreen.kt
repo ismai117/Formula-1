@@ -47,20 +47,15 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun StarterScreen(
     starterViewModel: StarterViewModel = viewModel(factory = StarterViewModel.Factory),
-    driversViewModel: DriversViewModel = viewModel(factory = DriversViewModel.Factory),
-    teamsViewModel: TeamsViewModel = viewModel(factory = TeamsViewModel.Factory),
     navigateToMainScreen: () -> Unit,
 ) {
 
-    val driversState by driversViewModel.state.collectAsState()
-    val teamsState by teamsViewModel.state.collectAsState()
+    val state by starterViewModel.state.collectAsState()
 
     StarterScreenContent(
-        driversState = driversState,
-        teamsState = teamsState,
+        state = state,
         getStarted = {
-            driversViewModel.getDrivers()
-            teamsViewModel.getTeams()
+            starterViewModel.getData()
         },
         navigateToMainScreen = {
             starterViewModel.onEvent(StarterOnEvent.STARTED)
@@ -73,26 +68,25 @@ fun StarterScreen(
 @Composable
 fun StarterScreenContent(
     platformType: Type = getPlatform().type,
-    driversState: DriversState,
-    teamsState: TeamsState,
+    state: StarterState,
     getStarted: () -> Unit,
     navigateToMainScreen: () -> Unit,
 ) {
 
     val hostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(driversState.status, teamsState.status) {
-        if (driversState.status && teamsState.status) {
+    LaunchedEffect(state.status, state.status) {
+        if (state.status && state.status) {
             navigateToMainScreen()
         }
     }
-    LaunchedEffect(driversState.message, teamsState.message) {
+    LaunchedEffect(state.message, state.message) {
         when{
-            driversState.message.isNotBlank() -> {
-                hostState.showSnackbar(driversState.message)
+            state.message.isNotBlank() -> {
+                hostState.showSnackbar(state.message)
             }
-            teamsState.message.isNotBlank() -> {
-                hostState.showSnackbar(teamsState.message)
+            state.message.isNotBlank() -> {
+                hostState.showSnackbar(state.message)
             }
         }
     }
@@ -116,16 +110,14 @@ fun StarterScreenContent(
         if (platformType == Type.MOBILE) {
 
             Mobile(
-                driversState = driversState,
-                teamsState = teamsState,
+                state = state,
                 getStarted = getStarted
             )
 
         } else {
 
             NonMobile(
-                driversState = driversState,
-                teamsState = teamsState,
+                state = state,
                 getStarted = getStarted
             )
 
@@ -138,8 +130,7 @@ fun StarterScreenContent(
 @Composable
 private fun Mobile(
     modifier: Modifier = Modifier,
-    driversState: DriversState,
-    teamsState: TeamsState,
+    state: StarterState,
     getStarted: () -> Unit
 ) {
 
@@ -153,7 +144,7 @@ private fun Mobile(
 
         HeaderContent()
 
-        if (driversState.isLoading && teamsState.isLoading) {
+        if (state.isLoading) {
 
             LoadingContent()
 
@@ -170,8 +161,7 @@ private fun Mobile(
 @Composable
 private fun NonMobile(
     modifier: Modifier = Modifier,
-    driversState: DriversState,
-    teamsState: TeamsState,
+    state: StarterState,
     getStarted: () -> Unit
 ) {
 
@@ -199,7 +189,7 @@ private fun NonMobile(
 
             HeaderContent()
 
-            if (driversState.isLoading && teamsState.isLoading) {
+            if (state.isLoading) {
 
                 LoadingContent()
 

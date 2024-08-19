@@ -11,13 +11,9 @@ import drivers.DriversRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import utils.Resource
 import kotlin.reflect.KClass
 
 data class DriversState(
-    val isLoading: Boolean = false,
-    val status: Boolean = false,
-    val message: String = "",
     val drivers: List<Driver> = emptyList()
 )
 
@@ -35,17 +31,7 @@ class DriversViewModel(
         viewModelScope.launch{
             driversRepository.getDrivers()
                 .collect { result ->
-                    when (result) {
-                        is Resource.Loading -> {
-                            _state.update { it.copy(isLoading = true) }
-                        }
-                        is Resource.Success -> {
-                            _state.update { it.copy(isLoading = false, status = true, drivers = result.data.orEmpty()) }
-                        }
-                        is Resource.Error -> {
-                            _state.update { it.copy(isLoading = false, message = result.message) }
-                        }
-                    }
+                    _state.update { it.copy(drivers = result.data.orEmpty()) }
                 }
         }
     }

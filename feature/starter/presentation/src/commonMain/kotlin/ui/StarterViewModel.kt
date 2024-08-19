@@ -4,12 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import commonMain.DriversModule
 import commonMain.StarterModule
+import commonMain.TeamsModule
+import drivers.DriversRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import starter.StarterRepository
+import teams.TeamsRepository
+import utils.Resource
 import kotlin.reflect.KClass
 
 data class StarterState(
@@ -19,8 +25,9 @@ data class StarterState(
     val isStarted: Boolean = false
 )
 
-
 class StarterViewModel(
+    private val driversRepository: DriversRepository,
+    private val teamsRepository: TeamsRepository,
     private val starterRepository: StarterRepository
 ) : ViewModel() {
 
@@ -48,6 +55,27 @@ class StarterViewModel(
         }
     }
 
+    fun getData(){
+        viewModelScope.launch {
+            combine(driversRepository.getDrivers(), teamsRepository.getTeams()){ drivers, teams ->
+                when {
+                    drivers is Resource.Loading || teams is Resource.Loading -> {
+                        _state.update { it.copy(isLoading = true) }
+                    }
+                    drivers is Resource.Success && teams is Resource.Success -> {
+                        _state.update { it.copy(isLoading = false, status = true) }
+                    }
+                    drivers is Resource.Error -> {
+                        _state.update { it.copy(isLoading = false, message = drivers.message) }
+                    }
+                    teams is Resource.Error -> {
+                        _state.update { it.copy(isLoading = false, message = teams.message) }
+                    }
+                }
+            }
+        }
+    }
+
     private fun setStartedState(){
         viewModelScope.launch {
             starterRepository.setStartedState()
@@ -58,7 +86,9 @@ class StarterViewModel(
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
                 return StarterViewModel(
-                    starterRepository = StarterModule.starterRepository
+                    starterRepository = StarterModule.starterRepository,
+                    driversRepository = DriversModule.driversRepository,
+                    teamsRepository = TeamsModule.teamsRepository
                 ) as T
             }
         }

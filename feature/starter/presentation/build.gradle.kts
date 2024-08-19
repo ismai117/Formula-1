@@ -53,8 +53,12 @@ kotlin {
 
             implementation(project(":feature:starter:di"))
             implementation(project(":feature:starter:domain"))
-            implementation(project(":feature:drivers:presentation"))
-            implementation(project(":feature:teams:presentation"))
+
+            implementation(project(":feature:drivers:di"))
+            implementation(project(":feature:drivers:domain"))
+
+            implementation(project(":feature:teams::di"))
+            implementation(project(":feature:teams:domain"))
 
             implementation(project(":core:utils"))
             

@@ -13,14 +13,14 @@ androidx-test-junit = "1.2.1"
 androidx-lifecycle = "2.8.0"
 androidx-navigation = "2.8.0-alpha08"
 compose = "1.6.8"
-compose-plugin = "1.7.0-alpha01"
+compose-plugin = "1.7.0-alpha02"
 junit = "4.13.2"
-kotlin = "2.0.0"
+kotlin = "2.0.10"
 ktor = "3.0.0-wasm2"
 kotlinx-coroutines = "1.9.0-RC"
 kotlinx-serialization = "1.7.1"
 napier = "2.7.1"
-coil = "3.0.0-alpha07"
+coil = "3.0.0-alpha09"
 colormath = "3.5.0"
 windowSizeClass = "0.5.0"
 constraintlayout = "0.4.0"
@@ -66,7 +66,7 @@ napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 
 colormath  = { module = "com.github.ajalt.colormath:colormath", version.ref = "colormath" }
