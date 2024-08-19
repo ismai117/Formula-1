@@ -30,9 +30,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,101 +38,69 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.slack.circuit.runtime.ui.Ui
 import drivers.Driver
 import getPlatform
-import org.koin.compose.koinInject
 import ui.sharedComponents.ImageLoader
 import ui.sharedComponents.parallaxLayoutModifier
 
-@Composable
-fun DriverDetailScreen(
-    driverNumber: Int,
-    navigateBack: () -> Unit
-) {
+class DriverDetail : Ui<DriverState> {
 
-    val driversViewModel = koinInject<DriversViewModel>()
-    val driver by driversViewModel.driver.collectAsState()
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
+    @Composable
+    override fun Content(state: DriverState, modifier: Modifier) {
 
-    LaunchedEffect(Unit) {
-        driversViewModel.getDriverByDriverNumber(driverNumber)
-    }
+        val windowSizeClass = calculateWindowSizeClass()
+        val isCompacted = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
-    DriverDetailScreenContent(
-        driver = driver,
-        driverNumber = driverNumber,
-        navigateBack = navigateBack
-    )
+        val platformType: Type = getPlatform().type
 
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
-@Composable
-fun DriverDetailScreenContent(
-    modifier: Modifier = Modifier,
-    platformType: Type = getPlatform().type,
-    driver: Driver?,
-    driverNumber: Int,
-    navigateBack: () -> Unit
-) {
-
-    val windowSizeClass = calculateWindowSizeClass()
-    val isCompacted = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navigateBack()
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { state.eventSink(DriverEvent.Pop) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = null,
+                                modifier = modifier.size(32.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = null,
-                            modifier = modifier.size(32.dp)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                    titleContentColor = Color.Black,
-                    navigationIconContentColor = Color.Black
-                )
-            )
-        }
-    ) { paddingValues ->
-
-        Box(
-            modifier = modifier
-                .padding(paddingValues)
-                .padding(top = if (getPlatform().type == Type.NON_MOBILE) 24.dp else 0.dp)
-                .fillMaxSize()
-        ) {
-
-            if (platformType == Type.MOBILE) {
-
-                Mobile(
-                    driver = driver,
-                    driverNumber = driverNumber
-                )
-
-            } else {
-
-                if (isCompacted){
-
-                    Mobile(
-                        driver = driver,
-                        driverNumber = driverNumber
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = Color.Black,
+                        navigationIconContentColor = Color.Black
                     )
+                )
+            }
+        ) { paddingValues ->
+
+            Box(
+                modifier = modifier
+                    .padding(paddingValues)
+                    .padding(top = if (getPlatform().type == Type.NON_MOBILE) 24.dp else 0.dp)
+                    .fillMaxSize()
+            ) {
+
+                if (platformType == Type.MOBILE) {
+
+                    Mobile(driver = state.driver)
 
                 } else {
 
-                    NonMobile(
-                        driver = driver,
-                        driverNumber = driverNumber
-                    )
+                    if (isCompacted){
+
+                        Mobile(driver = state.driver)
+
+                    } else {
+
+                        NonMobile(driver = state.driver)
+
+                    }
 
                 }
 
@@ -148,10 +113,9 @@ fun DriverDetailScreenContent(
 }
 
 @Composable
-fun Mobile(
+private fun Mobile(
     modifier: Modifier = Modifier,
-    driver: Driver?,
-    driverNumber: Int
+    driver: Driver?
 ){
 
     val scrollState = rememberScrollState()
@@ -198,7 +162,7 @@ fun Mobile(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "$driverNumber",
+                        text = "${driver?.driverNumber}",
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             fontSize = 28.sp,
@@ -320,10 +284,9 @@ fun Mobile(
 }
 
 @Composable
-fun NonMobile(
+private fun NonMobile(
     modifier: Modifier = Modifier,
-    driver: Driver?,
-    driverNumber: Int
+    driver: Driver?
 ){
 
     val scrollState = rememberScrollState()
@@ -366,7 +329,7 @@ fun NonMobile(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "$driverNumber",
+                        text = "${driver?.driverNumber}",
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             fontSize = 28.sp,

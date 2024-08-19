@@ -7,7 +7,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import platform.driversPlatformModule
 import remote.DriversRemoteService
-import ui.DriversViewModel
 
 val driversModule = module {
     includes(driversPlatformModule())

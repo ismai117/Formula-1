@@ -39,10 +39,14 @@ include(":core:model")
 include(":core:ui")
 include(":core:utils")
 
+include(":feature:splash:presentation")
+
 include(":feature:starter:di")
 include(":feature:starter:data")
 include(":feature:starter:domain")
 include(":feature:starter:presentation")
+
+include(":feature:pager:presentation")
 
 include(":feature:drivers:di")
 include(":feature:drivers:data")

@@ -15,9 +15,6 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,49 +26,32 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.github.ajalt.colormath.extensions.android.composecolor.toComposeColor
 import com.github.ajalt.colormath.parse
+import com.slack.circuit.runtime.ui.Ui
 import drivers.Driver
-import org.koin.compose.koinInject
 import ui.sharedComponents.ImageLoader
 import ui.sharedComponents.VerticalGrid
 
-@Composable
-fun DriversListScreen(
-    navigateToDriverDetailScreen: (Int) -> Unit
-) {
+class DriversList : Ui<DriverState> {
 
-    val driversViewModel = koinInject<DriversViewModel>()
-    val state by driversViewModel.state.collectAsState()
+    @Composable
+    override fun Content(state: DriverState, modifier: Modifier) {
 
-    LaunchedEffect(Unit){
-        driversViewModel.getDrivers()
-    }
+        VerticalGrid(
+            items = state.drivers
+        ) { driver ->
 
-    DriversListScreenContent(
-        state = state,
-        navigateToDriverDetailScreen = navigateToDriverDetailScreen
-    )
+            DriverItem(
+                driver = driver,
+                onClick = { driverNumber ->
+                    state.eventSink(DriverEvent.NavigateToDriverDetail(driverNumber = driverNumber))
+                }
+            )
 
-}
-
-@Composable
-fun DriversListScreenContent(
-    state: DriversState,
-    navigateToDriverDetailScreen: (Int) -> Unit
-) {
-
-    VerticalGrid(
-        items = state.drivers
-    ) { driver ->
-
-        DriverItem(
-            driver = driver,
-            onClick = { driverNumber -> navigateToDriverDetailScreen(driverNumber) }
-        )
+        }
 
     }
 
 }
-
 
 @Composable
 fun DriverItem(

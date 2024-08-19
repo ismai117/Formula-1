@@ -32,9 +32,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,123 +40,102 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.slack.circuit.runtime.ui.Ui
 import getPlatform
-import org.koin.compose.koinInject
 import teams.Team
 import ui.sharedComponents.parallaxLayoutModifier
 import ui.sharedComponents.ImageLoader
 
-@Composable
-fun TeamDetailScreen(
-    teamName: String,
-    navigateBack: () -> Unit
-) {
+class TeamDetail : Ui<TeamsState> {
 
-    val teamsViewModel = koinInject<TeamsViewModel>()
-    val team by teamsViewModel.team.collectAsState()
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
+    @Composable
+    override fun Content(state: TeamsState, modifier: Modifier) {
 
-    LaunchedEffect(Unit) {
-        teamsViewModel.getTeamByTeamName(teamName)
-    }
+        val windowSizeClass = calculateWindowSizeClass()
+        val isCompacted = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
-    TeamDetailScreenContent(
-        team = team,
-        navigateBack = navigateBack
-    )
+        val platformType: Type = getPlatform().type
 
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
-@Composable
-fun TeamDetailScreenContent(
-    modifier: Modifier = Modifier,
-    platformType: Type = getPlatform().type,
-    team: Team?,
-    navigateBack: () -> Unit
-) {
-
-    val windowSizeClass = calculateWindowSizeClass()
-    val isCompacted = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = team?.name.orEmpty(),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = state.team?.name.orEmpty(),
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
                         )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navigateBack()
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { state.eventSink(TeamEvent.Pop) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = null,
+                                modifier = modifier.size(32.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = null,
-                            modifier = modifier.size(32.dp)
+                    },
+                    actions = {
+                        ImageLoader(
+                            url = state.team?.logoUrl.orEmpty(),
+                            description = state.team?.name.orEmpty(),
+                            modifier = modifier
+                                .padding(end = 16.dp)
+                                .size(33.dp)
                         )
-                    }
-                },
-                actions = {
-                    ImageLoader(
-                        url = team?.logoUrl.orEmpty(),
-                        description = team?.name.orEmpty(),
-                        modifier = modifier
-                            .padding(end = 16.dp)
-                            .size(33.dp)
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        titleContentColor = Color.Black,
+                        navigationIconContentColor = Color.Black
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                    titleContentColor = Color.Black,
-                    navigationIconContentColor = Color.Black
                 )
-            )
-        }
-    ) { paddingValues ->
+            }
+        ) { paddingValues ->
 
-        Box(
-            modifier = modifier
-                .padding(paddingValues)
-                .padding(top = if (getPlatform().type == Type.NON_MOBILE) 24.dp else 0.dp)
-                .fillMaxSize()
-        ) {
+            Box(
+                modifier = modifier
+                    .padding(paddingValues)
+                    .padding(top = if (getPlatform().type == Type.NON_MOBILE) 24.dp else 0.dp)
+                    .fillMaxSize()
+            ) {
 
-            if (platformType == Type.MOBILE) {
+                if (platformType == Type.MOBILE) {
 
-                Mobile(team = team)
+                    Mobile(team = state.team)
 
-            } else {
+                } else {
 
-               if (isCompacted){
+                    if (isCompacted){
 
-                   Mobile(team = team)
+                        Mobile(team = state.team)
 
-               } else {
+                    } else {
 
-                   NonMobile(team = team)
+                        NonMobile(team = state.team)
 
-               }
+                    }
+
+                }
+
 
             }
 
-
         }
 
-    }
 
+    }
 
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Mobile(
+private fun Mobile(
     modifier: Modifier = Modifier,
     team: Team?
 ) {
@@ -524,7 +500,7 @@ fun Mobile(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NonMobile(
+private fun NonMobile(
     modifier: Modifier = Modifier,
     team: Team?
 ) {

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import getPlatform
 import kotlinx.coroutines.launch
+import ui.DriversList
 import ui.DriversListScreen
 import ui.TeamsListScreen
 import ui.sharedComponents.Header
@@ -117,7 +118,7 @@ fun HorizontalPagerScreenContent(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> {
+                    0 -> { DriversList()
                         DriversListScreen(navigateToDriverDetailScreen = navigateToDriverDetailScreen)
                     }
 

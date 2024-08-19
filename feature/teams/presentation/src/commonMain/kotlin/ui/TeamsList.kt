@@ -18,9 +18,6 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,51 +28,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.ajalt.colormath.extensions.android.composecolor.toComposeColor
 import com.github.ajalt.colormath.parse
-import org.koin.compose.koinInject
+import com.slack.circuit.runtime.ui.Ui
 import teams.Team
 import ui.sharedComponents.VerticalGrid
 import ui.sharedComponents.ImageLoader
 
-@Composable
-fun TeamsListScreen(
-    navigateToTeamDetailScreen: (String) -> Unit
-) {
+class TeamsList : Ui<TeamsState> {
 
-    val teamsViewModel = koinInject<TeamsViewModel>()
-    val state by teamsViewModel.state.collectAsState()
+    @Composable
+    override fun Content(state: TeamsState, modifier: Modifier) {
 
-    LaunchedEffect(Unit){
-        teamsViewModel.getTeams()
-    }
 
-    TeamsListScreenContent(
-        state = state,
-        navigateToTeamDetailScreen = navigateToTeamDetailScreen
-    )
+        VerticalGrid(
+            items = state.teams
+        ) { team ->
 
-}
+            TeamItem(
+                team = team,
+                onClick = { teamName ->
+                    state.eventSink(TeamEvent.NavigateToTeamDetail(teamName = teamName))
+                }
+            )
 
-@Composable
-fun TeamsListScreenContent(
-    state: TeamsState,
-    navigateToTeamDetailScreen: (String) -> Unit
-) {
-
-    VerticalGrid(
-        items = state.teams
-    ) { team ->
-
-        TeamItem(
-            team = team,
-            onClick = { name -> navigateToTeamDetailScreen(name) }
-        )
+        }
 
     }
 
 }
 
+
 @Composable
-fun TeamItem(
+private fun TeamItem(
     modifier: Modifier = Modifier,
     team: Team,
     onClick: (String) -> Unit

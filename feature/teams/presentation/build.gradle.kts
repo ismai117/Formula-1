@@ -57,6 +57,8 @@ kotlin {
             implementation(libs.bundles.colormath.common)
             implementation(libs.windowSizeClass)
 
+            implementation("com.slack.circuit:circuit-foundation:0.22.2")
+
             implementation(project(":feature:teams:domain"))
 
             implementation(project(":core:model"))
