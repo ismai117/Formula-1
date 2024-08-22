@@ -51,6 +51,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization)
             implementation(libs.bundles.koin.common)
+            implementation(libs.windowSizeClass)
 
             implementation(project(":feature:starter:domain"))
             implementation(project(":feature:drivers:domain"))

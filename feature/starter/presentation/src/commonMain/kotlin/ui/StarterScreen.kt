@@ -23,6 +23,9 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,6 +47,7 @@ import getPlatform
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun StarterScreen(
     platformType: Type = getPlatform().type,
@@ -54,6 +58,9 @@ fun StarterScreen(
     val state by starterViewModel.state.collectAsState()
 
     val hostState = remember { SnackbarHostState() }
+
+    val windowSizeClass = calculateWindowSizeClass()
+    val isCompacted = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     LaunchedEffect(state.status, state.status) {
         if (state.status && state.status) {
@@ -99,13 +106,24 @@ fun StarterScreen(
 
         } else {
 
-            NonMobile(
-                state = state,
-                getStarted = {
-                    starterViewModel.getData()
-                    starterViewModel.onEvent(StarterOnEvent.STARTED)
-                }
-            )
+            if(isCompacted){
+                Mobile(
+                    state = state,
+                    getStarted = {
+                        starterViewModel.getData()
+                        starterViewModel.onEvent(StarterOnEvent.STARTED)
+                    }
+                )
+            } else{
+                NonMobile(
+                    state = state,
+                    getStarted = {
+                        starterViewModel.getData()
+                        starterViewModel.onEvent(StarterOnEvent.STARTED)
+                    }
+                )
+            }
+
 
         }
 
