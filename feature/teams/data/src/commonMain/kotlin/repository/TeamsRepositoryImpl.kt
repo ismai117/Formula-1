@@ -26,4 +26,8 @@ class TeamsRepositoryImpl(
         return local.selectTeamByName(name)
     }
 
+    override suspend fun clear() {
+        local.clear()
+    }
+
 }

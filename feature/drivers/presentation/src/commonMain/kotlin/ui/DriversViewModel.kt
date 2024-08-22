@@ -38,4 +38,10 @@ class DriversViewModel(
         }
     }
 
+    fun clear(){
+        viewModelScope.launch {
+            driversRepository.clear()
+        }
+    }
+
 }

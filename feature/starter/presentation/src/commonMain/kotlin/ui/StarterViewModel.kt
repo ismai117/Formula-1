@@ -77,6 +77,13 @@ class StarterViewModel(
         }
     }
 
+    fun clear(){
+        viewModelScope.launch {
+            driversRepository.clear()
+            teamsRepository.clear()
+        }
+    }
+
 }
 
 sealed interface StarterOnEvent {

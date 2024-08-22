@@ -28,4 +28,8 @@ class TeamsLocalService(
         kStore.set(teams.map { it.fromTeam() })
     }
 
+    suspend fun clear(){
+        kStore.delete()
+    }
+
 }

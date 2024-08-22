@@ -24,5 +24,9 @@ class DriversRepositoryImpl(
         return local.selectDriverByDriverNumber(driverNumber)
     }
 
+    override suspend fun clear() {
+        local.clear()
+    }
+
 }
 

@@ -3,6 +3,7 @@ import androidx.compose.ui.window.application
 import di.initKoin
 
 fun main() = application {
+    initKoin()
     Window(
         onCloseRequest = ::exitApplication,
         title = "Formula1KMP",
@@ -11,7 +12,6 @@ fun main() = application {
 //        window.rootPane.putClientProperty("apple.awt.fullWindowContent", true)
 //        window.rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
 //        window.rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
-        initKoin {}
         App()
     }
 }

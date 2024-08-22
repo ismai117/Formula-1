@@ -27,4 +27,8 @@ class DriversLocalService(
         kStore.set(drivers.map { it.fromDriver() })
     }
 
+    suspend fun clear(){
+        kStore.delete()
+    }
+
 }
