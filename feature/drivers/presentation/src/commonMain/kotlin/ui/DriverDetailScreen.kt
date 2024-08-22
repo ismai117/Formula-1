@@ -41,19 +41,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import drivers.Driver
 import getPlatform
+import org.koin.compose.koinInject
 import ui.sharedComponents.ImageLoader
 import ui.sharedComponents.parallaxLayoutModifier
 
 @Composable
 fun DriverDetailScreen(
-    driversViewModel: DriversViewModel = viewModel(factory = DriversViewModel.Factory),
     driverNumber: Int,
     navigateBack: () -> Unit
 ) {
 
+    val driversViewModel = koinInject<DriversViewModel>()
     val driver by driversViewModel.driver.collectAsState()
 
     LaunchedEffect(Unit) {

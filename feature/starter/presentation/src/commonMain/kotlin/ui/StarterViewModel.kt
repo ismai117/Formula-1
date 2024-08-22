@@ -1,22 +1,17 @@
 package ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import commonMain.DriversModule
-import commonMain.StarterModule
-import commonMain.TeamsModule
 import drivers.DriversRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import starter.StarterRepository
 import teams.TeamsRepository
 import utils.Resource
-import kotlin.reflect.KClass
 
 data class StarterState(
     val isLoading: Boolean = false,
@@ -72,25 +67,13 @@ class StarterViewModel(
                         _state.update { it.copy(isLoading = false, message = teams.message) }
                     }
                 }
-            }
+            }.collect()
         }
     }
 
     private fun setStartedState(){
         viewModelScope.launch {
             starterRepository.setStartedState()
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-                return StarterViewModel(
-                    starterRepository = StarterModule.starterRepository,
-                    driversRepository = DriversModule.driversRepository,
-                    teamsRepository = TeamsModule.teamsRepository
-                ) as T
-            }
         }
     }
 

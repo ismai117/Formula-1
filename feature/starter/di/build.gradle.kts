@@ -30,9 +30,17 @@ kotlin {
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.koin.android)
+        }
         commonMain.dependencies {
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(project(":feature:drivers:domain"))
+            implementation(project(":feature:teams:domain"))
             implementation(project(":feature:starter:data"))
             implementation(project(":feature:starter:domain"))
+            implementation(project(":feature:starter:presentation"))
         }
     }
 

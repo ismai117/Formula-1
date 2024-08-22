@@ -1,14 +1,18 @@
 package platform
 
 import android.content.Context
-import applicationContext
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
 import local.TeamEntity
 import okio.Path.Companion.toPath
+import org.koin.core.module.Module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-internal actual fun createKStore(): KStore<List<TeamEntity>> {
-    return teams(applicationContext)
+actual fun teamsPlatformModule(): Module = module {
+    single<KStore<List<TeamEntity>>>(named("teams_kstore")) {
+        teams(get())
+    }
 }
 
 private fun teams(ctx: Context): KStore<List<TeamEntity>> {

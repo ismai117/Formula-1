@@ -3,6 +3,7 @@ package local
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.extensions.getOrEmpty
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import local.TeamEntity.Companion.fromTeam
 import teams.Team

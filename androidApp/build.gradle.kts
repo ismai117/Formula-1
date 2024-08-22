@@ -45,6 +45,7 @@ android {
     dependencies {
         implementation(project(":app"))
         implementation(libs.androidx.activity.compose)
+        implementation(libs.koin.android)
         debugImplementation(libs.compose.ui.tooling)
     }
 }

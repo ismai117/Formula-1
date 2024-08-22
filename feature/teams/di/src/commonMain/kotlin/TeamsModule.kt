@@ -1,19 +1,18 @@
 package commonMain
 
 import local.TeamsLocalService
-import platform.TeamsPlatformModule
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import platform.teamsPlatformModule
 import remote.TeamsRemoteService
 import teams.TeamsRepository
 import repository.TeamsRepositoryImpl
+import ui.TeamsViewModel
 
-object TeamsModule {
-    private val teamsRemoteService: TeamsRemoteService by lazy {
-        TeamsRemoteService()
-    }
-    private val teamsLocalService: TeamsLocalService by lazy {
-        TeamsLocalService(TeamsPlatformModule.kStore)
-    }
-    val teamsRepository: TeamsRepository by lazy {
-        TeamsRepositoryImpl(teamsRemoteService, teamsLocalService)
-    }
+val teamsModule = module {
+    includes(teamsPlatformModule())
+    single { TeamsRemoteService() }
+    single { TeamsLocalService(get(named("teams_kstore"))) }
+    single<TeamsRepository> { TeamsRepositoryImpl(get(), get()) }
+    factory { TeamsViewModel(get()) }
 }

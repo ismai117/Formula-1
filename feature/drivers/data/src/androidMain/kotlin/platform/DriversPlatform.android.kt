@@ -6,9 +6,14 @@ import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
 import local.DriverEntity
 import okio.Path.Companion.toPath
+import org.koin.core.module.Module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-internal actual fun createKStore(): KStore<List<DriverEntity>> {
-    return drivers(applicationContext)
+actual fun driversPlatformModule(): Module = module {
+    single<KStore<List<DriverEntity>>>(named("drivers_kstore")) {
+        drivers(get())
+    }
 }
 
 private fun drivers(ctx: Context): KStore<List<DriverEntity>> {

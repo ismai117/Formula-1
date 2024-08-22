@@ -3,8 +3,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import commonMain.driversModule
+import commonMain.starterModule
+import commonMain.teamsModule
 import navigation.Navigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinApplication
 import theme.AppTheme
 import ui.sharedComponents.setSingletonImageLoader
 

@@ -67,6 +67,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.koin.android)
         }
 
         commonMain.dependencies {
@@ -81,13 +82,19 @@ kotlin {
             implementation(libs.kotlinx.serialization)
             implementation(libs.bundles.colormath.common)
             implementation(libs.constraintlayout)
+            implementation(libs.bundles.koin.common)
 
             implementation(project(":core:model"))
             implementation(project(":core:ui"))
             implementation(project(":core:utils"))
 
+            implementation(project(":feature:starter::di"))
             implementation(project(":feature:starter:presentation"))
+
+            implementation(project(":feature:drivers::di"))
             implementation(project(":feature:drivers:presentation"))
+
+            implementation(project(":feature:teams:di"))
             implementation(project(":feature:teams:presentation"))
 
 

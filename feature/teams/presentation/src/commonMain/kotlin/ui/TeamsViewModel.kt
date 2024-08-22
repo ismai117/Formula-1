@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import commonMain.TeamsModule
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -39,16 +38,6 @@ class TeamsViewModel(
     fun getTeamByTeamName(name: String) {
         viewModelScope.launch {
             _team.update { teamsRepository.getTeamByTeamName(name) }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-                return TeamsViewModel(
-                    teamsRepository = TeamsModule.teamsRepository
-                ) as T
-            }
         }
     }
 

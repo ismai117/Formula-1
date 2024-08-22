@@ -51,10 +51,10 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization)
             implementation(libs.bundles.ktor.common)
+            implementation(libs.bundles.koin.common)
             implementation(libs.bundles.colormath.common)
             implementation(libs.windowSizeClass)
 
-            implementation(project(":feature:teams:di"))
             implementation(project(":feature:teams:domain"))
 
             implementation(project(":core:model"))

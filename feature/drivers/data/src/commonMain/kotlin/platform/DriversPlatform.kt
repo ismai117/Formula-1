@@ -1,12 +1,5 @@
 package platform
 
-import io.github.xxfast.kstore.KStore
-import local.DriverEntity
+import org.koin.core.module.Module
 
-internal expect fun createKStore(): KStore<List<DriverEntity>>
-
-object DriversPlatformModule {
-    val kStore: KStore<List<DriverEntity>> by lazy {
-        createKStore()
-    }
-}
+expect fun driversPlatformModule(): Module

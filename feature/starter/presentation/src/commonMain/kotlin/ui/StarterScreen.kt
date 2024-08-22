@@ -37,41 +37,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import formula1kmp.feature.starter.presentation.generated.resources.Res
 import formula1kmp.feature.starter.presentation.generated.resources.bg
 import formula1kmp.feature.starter.presentation.generated.resources.logo
 import getPlatform
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @Composable
 fun StarterScreen(
-    starterViewModel: StarterViewModel = viewModel(factory = StarterViewModel.Factory),
+    platformType: Type = getPlatform().type,
+    starterViewModel: StarterViewModel = koinInject<StarterViewModel>(),
     navigateToMainScreen: () -> Unit,
 ) {
 
     val state by starterViewModel.state.collectAsState()
-
-    StarterScreenContent(
-        state = state,
-        getStarted = {
-            starterViewModel.getData()
-        },
-        navigateToMainScreen = {
-            starterViewModel.onEvent(StarterOnEvent.STARTED)
-            navigateToMainScreen()
-        }
-    )
-
-}
-
-@Composable
-fun StarterScreenContent(
-    platformType: Type = getPlatform().type,
-    state: StarterState,
-    getStarted: () -> Unit,
-    navigateToMainScreen: () -> Unit,
-) {
 
     val hostState = remember { SnackbarHostState() }
 
@@ -111,14 +91,20 @@ fun StarterScreenContent(
 
             Mobile(
                 state = state,
-                getStarted = getStarted
+                getStarted = {
+                    starterViewModel.getData()
+                    starterViewModel.onEvent(StarterOnEvent.STARTED)
+                }
             )
 
         } else {
 
             NonMobile(
                 state = state,
-                getStarted = getStarted
+                getStarted = {
+                    starterViewModel.getData()
+                    starterViewModel.onEvent(StarterOnEvent.STARTED)
+                }
             )
 
         }

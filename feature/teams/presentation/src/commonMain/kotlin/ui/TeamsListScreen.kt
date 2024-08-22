@@ -32,16 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.ajalt.colormath.extensions.android.composecolor.toComposeColor
 import com.github.ajalt.colormath.parse
+import org.koin.compose.koinInject
 import teams.Team
 import ui.sharedComponents.VerticalGrid
 import ui.sharedComponents.ImageLoader
 
 @Composable
 fun TeamsListScreen(
-    teamsViewModel: TeamsViewModel = viewModel(factory = TeamsViewModel.Factory),
     navigateToTeamDetailScreen: (String) -> Unit
 ) {
 
+    val teamsViewModel  = koinInject<TeamsViewModel>()
     val state by teamsViewModel.state.collectAsState()
 
     LaunchedEffect(Unit){

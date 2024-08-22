@@ -50,14 +50,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization)
+            implementation(libs.bundles.koin.common)
 
-            implementation(project(":feature:starter:di"))
             implementation(project(":feature:starter:domain"))
-
-            implementation(project(":feature:drivers:di"))
             implementation(project(":feature:drivers:domain"))
-
-            implementation(project(":feature:teams::di"))
             implementation(project(":feature:teams:domain"))
 
             implementation(project(":core:utils"))

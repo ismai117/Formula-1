@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(libs.bundles.koin.common)
     implementation(project(":app"))
 }
 

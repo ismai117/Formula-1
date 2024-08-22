@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.kstore.file)
             implementation(libs.ktor.client.android)
+            implementation(libs.koin.android)
             implementation("androidx.startup:startup-runtime:1.1.1")
         }
 
@@ -45,6 +46,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization)
             implementation(libs.bundles.ktor.common)
+            implementation(libs.bundles.koin.common)
             implementation(libs.napier)
             implementation(libs.kstore)
 

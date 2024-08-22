@@ -11,8 +11,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import platform.Foundation.NSFileManager
 
-internal actual fun createKStore(): KStore<List<DriverEntity>> {
-   return drivers()
+actual fun driversPlatformModule(): Module = module {
+    single<KStore<List<DriverEntity>>>(named("drivers_kstore")) {
+        drivers()
+    }
 }
 
 @OptIn(ExperimentalKStoreApi::class)

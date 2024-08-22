@@ -1,12 +1,5 @@
 package platform
 
-import io.github.xxfast.kstore.KStore
-import local.TeamEntity
+import org.koin.core.module.Module
 
-internal expect fun createKStore(): KStore<List<TeamEntity>>
-
-object TeamsPlatformModule {
-    val kStore: KStore<List<TeamEntity>> by lazy {
-        createKStore()
-    }
-}
+expect fun teamsPlatformModule(): Module

@@ -27,19 +27,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.ajalt.colormath.extensions.android.composecolor.toComposeColor
 import com.github.ajalt.colormath.parse
 import drivers.Driver
+import org.koin.compose.koinInject
 import ui.sharedComponents.ImageLoader
 import ui.sharedComponents.VerticalGrid
 
 @Composable
 fun DriversListScreen(
-    driversViewModel: DriversViewModel = viewModel(factory = DriversViewModel.Factory),
     navigateToDriverDetailScreen: (Int) -> Unit
 ) {
 
+    val driversViewModel = koinInject<DriversViewModel>()
     val state by driversViewModel.state.collectAsState()
 
     LaunchedEffect(Unit){

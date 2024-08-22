@@ -34,12 +34,16 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
+            implementation(libs.koin.android)
             implementation(libs.kstore.file)
         }
         commonMain.dependencies {
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
             implementation(libs.kstore)
             implementation(project(":feature:drivers:data"))
             implementation(project(":feature:drivers:domain"))
+            implementation(project(":feature:drivers:presentation"))
         }
 
         desktopMain.dependencies {

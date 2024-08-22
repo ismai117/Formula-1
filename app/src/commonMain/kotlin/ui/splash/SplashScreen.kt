@@ -18,15 +18,16 @@ import formula1kmp.app.generated.resources.Res
 import formula1kmp.app.generated.resources.logo
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import ui.StarterViewModel
 
 @Composable
 fun SplashScreen(
-    starterViewModel: StarterViewModel = viewModel(factory = StarterViewModel.Factory),
     navigateToMainScreen: () -> Unit,
     navigateToStarterScreen: () -> Unit
 ) {
 
+    val starterViewModel = koinInject<StarterViewModel>()
     val state by starterViewModel.state.collectAsState()
 
     println("isStarted; ${state.isStarted}")

@@ -1,5 +1,6 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import di.initKoin
 
 fun main() = application {
     Window(
@@ -10,6 +11,7 @@ fun main() = application {
 //        window.rootPane.putClientProperty("apple.awt.fullWindowContent", true)
 //        window.rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
 //        window.rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
+        initKoin {}
         App()
     }
 }
